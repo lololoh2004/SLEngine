@@ -1,0 +1,61 @@
+#pragma once
+#include <filesystem>
+#include <sol/sol.hpp>
+#include <string_view>
+#include "console/console_wrapper.hpp"
+
+namespace lua{
+    inline sol::state server_state;
+    inline sol::state client_state; // --PLASEHOLDER--
+    enum class states{
+        server,client
+    };
+
+
+    inline void init_state(){
+        server_state.open_libraries(sol::lib::base,
+            sol::lib::package,sol::lib::string,
+            sol::lib::table,sol::lib::math,
+            sol::lib::ffi);
+        client_state.open_libraries(sol::lib::base,
+            sol::lib::package,sol::lib::string,
+            sol::lib::table,sol::lib::math);
+    }
+
+    [[nodiscard]] inline sol::state& get_state(states type) noexcept {
+        switch (type){
+        case states::server: return server_state;
+        case states::client: return client_state;
+        }
+        return client_state;
+    }
+
+    template <typename T>
+    [[nodiscard]] T do_file(const std::string& path, sol::state& state) {
+        if (!std::filesystem::exists(path))
+            return T{};
+        try{
+            auto result = state.script_file(path);
+            int count = result.return_count();
+            [[assume(count >= 0)]];
+            return count > 0 ? result.get<T>() : T{};
+        }catch (const std::exception& error){
+            console::msg(error.what(), "\n");
+        }
+        return T{};
+    }
+    inline void do_file(const std::string& path, sol::state& state){
+        if (!std::filesystem::exists(path))
+            return;
+        try{
+            state.script_file(path);
+        } catch (const std::exception& error){
+            console::msg(error.what(), "\n");
+        }
+    }
+
+    template <typename Func>
+    void add_func(std::string_view name, Func&& func){
+        server_state.set_function(name, std::forward<Func>(func));
+    } // --FIX IT--
+}
