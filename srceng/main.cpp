@@ -5,12 +5,14 @@
 
 int main() {
     console::clear();
-    console::msg("Hello", "World");
+    console::msg("Hello", "World\n");
     // sol::table config = lua::do_file<sol::table>("config.lua");
     // int result = lua::table_value<int>(config, "width");
     // console::msg(result);
 
-    lua::do_file("config.lua", lua::get_state(lua::states::server));
+    lua::init_state();
+    //lua::do_file("config.lua", lua::get_state(lua::states::server));
+    lua::do_file("test.lua", lua::get_state(lua::states::server));
     //console::msg(table.get<std::string>());
     console::ask("\nEnter to quit");
 

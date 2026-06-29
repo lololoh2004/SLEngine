@@ -40,30 +40,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 target_compile_definitions(${PROJECT_NAME} PRIVATE
         SOL_USING_LUAJIT=1
         SOL_ALL_SAFETIES_ON=1
+        LUA_BUILD_AS_DLL=1
+        _CRT_SECURE_NO_WARNINGS
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-        "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/libluajit.a"
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/lua51.lib"
         raylib
-        winmm gdi32
 )
-
-# --- AUTO-COPY SYSTEM DLLs ---
-set(ENGINE_DLLS
-        "libgcc_s_seh-1.dll"
-        "libstdc++-6.dll"
-        "libwinpthread-1.dll"
-)
-
-get_filename_component(COMPILER_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
-
-foreach(DLL_NAME ${ENGINE_DLLS})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${COMPILER_DIR}/${DLL_NAME}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/${DLL_NAME}"
-    )
-endforeach()
 
 # --- AUTO-COPY RAYLIB DLL ---
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -71,3 +55,32 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         "$<TARGET_FILE:raylib>"
         "${CMAKE_CURRENT_SOURCE_DIR}/$<TARGET_FILE_NAME:raylib>"
 )
+
+# --- AUTO-COPY LUAJIT DLL ---
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/lua51.dll"
+        "${CMAKE_CURRENT_SOURCE_DIR}/lua51.dll"
+)
+
+# --- A DUMP OF MSVC SYSTEM DLLs FOR USERS ---
+if(MSVC)
+    # Find the location of the compiler binaries folder
+    get_filename_component(COMPILER_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+
+    # runtime-libs Microsoft, which can be modified
+    set(MSVC_DLLS
+            "vcruntime140.dll"
+            "msvcp140.dll"
+            "vcruntime140_1.dll"
+    )
+
+    # Copy in PROJECT root
+    foreach(DLL_NAME ${MSVC_DLLS})
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${COMPILER_DIR}/${DLL_NAME}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/${DLL_NAME}"
+        )
+    endforeach()
+endif()

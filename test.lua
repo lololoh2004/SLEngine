@@ -1,15 +1,8 @@
-local success, ffi = pcall(require, "ffi")
+local count = 10
+count += 5
+print("Result is: " .. count)
 
-if success then
-    print("FFI Aviable! Working on " .. ffi.os)
-    
-    ffi.cdef[[
-        void Sleep(int ms);
-    ]]
-else
-    print("FFI Not Aviable")
+for i = 1, 3 do
+if i == 2 then continue end
+print("Loop index: " .. i)
 end
-
-PrintHello()
-
---return 42
