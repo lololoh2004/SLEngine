@@ -17,9 +17,9 @@ namespace lua{
             sol::lib::package,sol::lib::string,
             sol::lib::table,sol::lib::math,
             sol::lib::ffi);
-        client_state.open_libraries(sol::lib::base,
-            sol::lib::package,sol::lib::string,
-            sol::lib::table,sol::lib::math);
+        server_state["ENGINE_PATH"] = std::filesystem::current_path().string();
+
+        client_state.open_libraries(sol::lib::base);
     }
 
     [[nodiscard]] inline sol::state& get_state(states type) noexcept {
@@ -40,7 +40,7 @@ namespace lua{
             [[assume(count >= 0)]];
             return count > 0 ? result.get<T>() : T{};
         }catch (const std::exception& error){
-            console::msg(error.what(), "\n");
+            term::msg(error.what(), "\n");
         }
         return T{};
     }
@@ -50,7 +50,7 @@ namespace lua{
         try{
             state.script_file(path);
         } catch (const std::exception& error){
-            console::msg(error.what(), "\n");
+            term::msg(error.what(), "\n");
         }
     }
 
@@ -58,4 +58,29 @@ namespace lua{
     void add_func(std::string_view name, Func&& func){
         server_state.set_function(name, std::forward<Func>(func));
     } // --FIX IT--
+
+    [[nodiscard]] inline std::vector<std::string> keys_to_vector (sol::table table) {
+        std::vector<std::string> result;
+        result.reserve(table.size());
+
+        table.for_each([&result](sol::object const& key, auto const& value){
+            if (key.is<std::string>())
+                result.emplace_back(key.as<std::string>());
+        });
+
+        return result;
+    }
+    [[nodiscard]] inline std::unordered_map<std::string, std::string> table_to_hash (sol::table table) {
+        std::unordered_map<std::string, std::string> result;
+
+        for (auto [key, value] : table) {
+            if (key.is<std::string>() && value.is<std::string>()) {
+                std::string name = key.as<std::string>();
+                std::string code = value.as<std::string>();
+
+                result[name] = code;
+            }
+        }
+        return result;
+    }
 }

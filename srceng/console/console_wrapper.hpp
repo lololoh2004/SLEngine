@@ -8,8 +8,10 @@
 #endif
 
 #include <iostream>
+#include <unordered_map>
 
-namespace console{
+namespace term{
+    inline std::unordered_map<std::string, std::string> colors;
 
     inline void clear(){
         std::cout << "\033[H\033[2J" << std::flush;
@@ -25,6 +27,11 @@ namespace console{
     template <typename ... Args>
     void msg(Args&&... args){
         (std::cout << ... << args);
+    }
+
+    inline std::string get_color(const std::string& name){
+        auto i = colors.find(name);
+        return i->second;
     }
 
 

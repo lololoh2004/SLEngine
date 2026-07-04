@@ -22,7 +22,9 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         srceng/console/console_wrapper.hpp
         srceng/console/console_additions.cpp
         srceng/console/console_additions.h
-        srceng/glua/math.hpp)
+        srceng/glua/math.hpp
+        srceng/utils/file_sys.cpp
+        srceng/utils/file_sys.h)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
