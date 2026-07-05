@@ -1,7 +1,8 @@
 #include "console_additions.h"
+#include "console_wrapper.hpp"
+#include <conio.h>
 
-namespace term
-{
+namespace term{
     void progress_bar(double current, double total){
         float progress = current / total;
 

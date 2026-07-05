@@ -1,27 +1,18 @@
 #pragma once
 
-#if defined(_WIN32) || defined(_WIN64)
-    // #include <windows.h>
-    #include <conio.h>
-// #elif defined(__linux__)
-//     #include <unistd.h>
-#endif
-
 #include <iostream>
 #include <unordered_map>
 
 namespace term{
-    inline std::unordered_map<std::string, std::string> colors;
+    inline std::unordered_map<std::string, std::string> ansi;
 
     inline void clear(){
         std::cout << "\033[H\033[2J" << std::flush;
     }
 
-    inline char ask(std::string_view text){
-        char temp;
-        std::cout << text;
-        std::cin.get(temp);
-        return temp;
+    inline void ask(std::string_view text){
+        std::cout << text << std::flush;
+        while (std::cin.get() != '\n');
     }
 
     template <typename ... Args>
@@ -29,9 +20,11 @@ namespace term{
         (std::cout << ... << args);
     }
 
-    inline std::string get_color(const std::string& name){
-        auto i = colors.find(name);
-        return i->second;
+    inline std::string get_ansi(std::string_view name ){
+        auto i = ansi.find(std::string(name));
+        if (i != ansi.end())
+            return i->second;
+        return "";
     }
 
 

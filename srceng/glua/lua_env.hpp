@@ -55,9 +55,9 @@ namespace lua{
     }
 
     template <typename Func>
-    void add_func(std::string_view name, Func&& func){
-        server_state.set_function(name, std::forward<Func>(func));
-    } // --FIX IT--
+    void add_func(std::string_view name, Func&& func, sol::state& state){
+        state.set_function(name, std::forward<Func>(func));
+    }
 
     [[nodiscard]] inline std::vector<std::string> keys_to_vector (sol::table table) {
         std::vector<std::string> result;
