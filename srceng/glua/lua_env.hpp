@@ -11,7 +11,6 @@ namespace lua{
         server,client
     };
 
-
     inline void init_state(){
         server_state.open_libraries(sol::lib::base,
             sol::lib::package,sol::lib::string,
@@ -59,17 +58,6 @@ namespace lua{
         state.set_function(name, std::forward<Func>(func));
     }
 
-    [[nodiscard]] inline std::vector<std::string> keys_to_vector (sol::table table) {
-        std::vector<std::string> result;
-        result.reserve(table.size());
-
-        table.for_each([&result](sol::object const& key, auto const& value){
-            if (key.is<std::string>())
-                result.emplace_back(key.as<std::string>());
-        });
-
-        return result;
-    }
     [[nodiscard]] inline std::unordered_map<std::string, std::string> table_to_hash (sol::table table) {
         std::unordered_map<std::string, std::string> result;
 
