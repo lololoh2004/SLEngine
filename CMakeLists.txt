@@ -65,11 +65,22 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
         BGFX_SHARED_LIB_API=1
 )
 
+if(WIN32)
+    if(MSVC)
+        set(LUAJIT_LIB_NAME "lua51.lib")
+    else()
+        set(LUAJIT_LIB_NAME "lua51")
+    endif()
+else()
+    set(LUAJIT_LIB_NAME "luajit")
+endif()
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
-        "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/lua51.lib"
         bgfx
         glfw
+        ${LUAJIT_LIB_NAME}
 )
+target_link_directories(${PROJECT_NAME} PRIVATE "thirdparty/luajit/src")
 
 # --- AUTO-COPY BGFX DLL ---
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -79,29 +90,27 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 # --- AUTO-COPY LUAJIT DLL ---
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/lua51.dll"
-        "${CMAKE_CURRENT_SOURCE_DIR}/lua51.dll"
-)
+if(WIN32)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/lua51.dll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/lua51.dll"
+    )
+endif()
 
-# --- A DUMP OF MSVC SYSTEM DLLs FOR USERS ---
-if(MSVC)
-    # Find the location of the compiler binaries folder
-    get_filename_component(COMPILER_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+if(WIN32 AND NOT MSVC)
+    get_filename_component(MINGW_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
 
-    # runtime-libs Microsoft, which can be modified
-    set(MSVC_DLLS
-            "vcruntime140.dll"
-            "msvcp140.dll"
-            "vcruntime140_1.dll"
+    set(MINGW_DLLS
+            "libgcc_s_seh-1.dll"
+            "libstdc++-6.dll"
+            "libwinpthread-1.dll"
     )
 
-    # Copy in PROJECT root
-    foreach(DLL_NAME ${MSVC_DLLS})
+    foreach(DLL_NAME ${MINGW_DLLS})
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${COMPILER_DIR}/${DLL_NAME}"
+                "${MINGW_BIN_DIR}/${DLL_NAME}"
                 "${CMAKE_CURRENT_SOURCE_DIR}/${DLL_NAME}"
         )
     endforeach()

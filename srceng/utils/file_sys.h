@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace util{
-    const enum class scan_modes{
+    enum class scan_modes{
         all, only_files, only_folders
     };
     [[nodiscard]] std::string path(std::initializer_list<std::string_view> args) noexcept;
