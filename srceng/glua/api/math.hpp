@@ -1,7 +1,7 @@
 #pragma once
 #include <concepts>
 
-namespace math{
+namespace lua::math{
 
     template <typename T>
     concept int_or_float = std::is_integral_v<T> || std::is_floating_point_v<T>;

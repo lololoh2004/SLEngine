@@ -1,0 +1,6 @@
+-- Init Tree Structure of API (NOW IN .exe)
+--api = api or {}
+--api.console = api.console or {}
+--api.math = api.math or {}
+--util = util or {}
+--physics = physics or {}

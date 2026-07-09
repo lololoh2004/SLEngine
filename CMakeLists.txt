@@ -23,15 +23,15 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         srceng/console/console_wrapper.hpp
         srceng/console/console_additions.cpp
         srceng/console/console_additions.h
-        srceng/glua/math.hpp
+        srceng/glua/api/math.hpp
         srceng/utils/file_sys.cpp
         srceng/utils/file_sys.h
-        srceng/glua/reg.cpp
-        srceng/glua/console.cpp
-        srceng/glua/console.h
-        srceng/utils/other.cpp
-        srceng/utils/other.h
-        srceng/glua/reg.h
+        srceng/glua/init_lua_modules.cpp
+        srceng/glua/api/console.cpp
+        srceng/glua/api/console.h
+        srceng/glua/init_lua_modules.h
+        srceng/glua/utils/converters.cpp
+        srceng/glua/utils/converters.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

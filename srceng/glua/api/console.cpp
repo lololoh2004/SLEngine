@@ -1,13 +1,12 @@
 #include "console.h"
-#include "lua_env.hpp"
-#include "utils/other.h"
+#include "../lua_env.hpp"
 
 namespace lua::console{
     void pro_print(std::string_view style1, std::string_view style2, sol::variadic_args va){
         std::string result;
 
-        result += term::get_ansi(util::to_lower(style1));
-        result += term::get_ansi(util::to_lower(style2));
+        result += term::get_ansi(style1);
+        result += term::get_ansi(style2);
 
         for (const auto& obj : va){
             sol::type obj_type = obj.get_type();

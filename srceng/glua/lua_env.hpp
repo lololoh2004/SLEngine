@@ -57,18 +57,4 @@ namespace lua{
     void add_func(std::string_view name, Func&& func, sol::state& state){
         state.set_function(name, std::forward<Func>(func));
     }
-
-    [[nodiscard]] inline std::unordered_map<std::string, std::string> table_to_hash (sol::table table) {
-        std::unordered_map<std::string, std::string> result;
-
-        for (auto [key, value] : table) {
-            if (key.is<std::string>() && value.is<std::string>()) {
-                std::string name = key.as<std::string>();
-                std::string code = value.as<std::string>();
-
-                result[name] = code;
-            }
-        }
-        return result;
-    }
 }
