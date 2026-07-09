@@ -1,5 +1,5 @@
 #include "console/console_wrapper.hpp"
-#include "console/console_additions.h"
+//#include "console/console_additions.h"
 #include "glua/console.h"
 #include "glua/lua_env.hpp"
 #include "utils/file_sys.h"
@@ -51,8 +51,8 @@ int main() {
     // === RUN LOGIC ===
     lua::do_file("on_engine_init.lua", lua::get_state(lua::states::server));
 
-    // int bp_choise = term::pick("Choose Blueprint-Content", bp_content_vector);
-    // term::msg("\n", bp_choise);
+    // int bp_choice = term::pick("Choose Blueprint-Content", bp_content_vector);
+    // term::msg("\n", bp_choice);
 
     term::ask("\nEnter to quit");
     return 0;
