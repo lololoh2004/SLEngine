@@ -8,3 +8,5 @@ cmake-build-release/
 *.dll
 *.a
 *.lib
+thirdparty/bgfx.cmake/
+thirdparty/glfw/
