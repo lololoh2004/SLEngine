@@ -37,7 +37,9 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         srceng/glua/console.cpp
         srceng/glua/console.h
         srceng/utils/other.cpp
-        srceng/utils/other.h)
+        srceng/utils/other.h
+        srceng/render/render_main.cpp
+        srceng/render/render_main.h)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"

@@ -3,12 +3,12 @@
 #include "glua/console.h"
 #include "glua/lua_env.hpp"
 #include "utils/file_sys.h"
+#include "render/render_main.h"
 
 int main() {
     term::clear();
 
-
-    // === INIT AND VARS ===
+    // === LUA INIT AND VARS ===
     lua::init_state();
     sol::state_view state = lua::get_state(lua::states::server);
 
@@ -30,6 +30,8 @@ int main() {
     // vector which include ALL folder names in bp_path
     std::vector bp_content_vector = util::directory_to_vector(bp_path.data(), util::scan_modes::only_folders);
 
+    // === GRAPHICS INIT AND VARS ===
+    render::init();
 
     // === CFG and POST-INIT LOGIC ===
     // get the style LUA_TABLE from cfg file
