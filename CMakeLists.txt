@@ -45,6 +45,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         "thirdparty/luajit/src"
         # GLFW
         "thirdparty/glfw/include"
+        "/thirdparty/sdl3/include"
 )
 
 # --- DEFINITIONS & LIBRARIES ---
@@ -69,32 +70,42 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         ${LUAJIT_LIB_NAME}
 )
-target_link_directories(${PROJECT_NAME} PRIVATE "thirdparty/luajit/src")
+target_link_directories(${PROJECT_NAME} PRIVATE
+        "thirdparty/luajit/src"
+        "/thirdparty/sdl3/lib")
 
-# --- AUTO-COPY LUAJIT DLL ---
+# --- AUTO-COPY ALL WINDOWS DLLs TO SOURCE ROOT ---
 if(WIN32)
+    # SDL3
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sdl3/bin/SDL3.dll"
+            "${CMAKE_CURRENT_SOURCE_DIR}/SDL3.dll"
+    )
+
+    # LuaJIT
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/luajit/src/lua51.dll"
             "${CMAKE_CURRENT_SOURCE_DIR}/lua51.dll"
     )
-endif()
 
-# --- AUTO-COPY BASE DLL ---
-if(WIN32 AND NOT MSVC)
-    get_filename_component(MINGW_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+    # SYSTEM
+    if(NOT MSVC)
+        get_filename_component(MINGW_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
 
-    set(MINGW_DLLS
-            "libgcc_s_seh-1.dll"
-            "libstdc++-6.dll"
-            "libwinpthread-1.dll"
-    )
-
-    foreach(DLL_NAME ${MINGW_DLLS})
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${MINGW_BIN_DIR}/${DLL_NAME}"
-                "${CMAKE_CURRENT_SOURCE_DIR}/${DLL_NAME}"
+        set(MINGW_DLLS
+                "libgcc_s_seh-1.dll"
+                "libstdc++-6.dll"
+                "libwinpthread-1.dll"
         )
-    endforeach()
+
+        foreach(DLL_NAME ${MINGW_DLLS})
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${MINGW_BIN_DIR}/${DLL_NAME}"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/${DLL_NAME}"
+            )
+        endforeach()
+    endif()
 endif()

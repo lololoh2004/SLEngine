@@ -17,6 +17,8 @@ namespace lua::base{
         console_table["clear"] = &term::clear;
         console_table["ask"] = &term::ask;
         console_table["get_ansi"] = &term::get_ansi;
+        console_table["ask"] = &term::ask;
+        //console_table["ask"] = &term::;
         // from c++ util::...
         util_table["system_launch"] = &util::launch;
         // From c++ math::
@@ -26,6 +28,7 @@ namespace lua::base{
         math_table["approach"] = &math::approach<double>;
         math_table["remap"] = &math::remap<double>;
         // Lua console module
-        console_table["pro_print"] = &lua::console::pro_print;
+        console_table["pro_print"] = &lua::lua_term::pro_print;
+        console_table["pick"] = &lua::lua_term::lua_pick;
     }
 }

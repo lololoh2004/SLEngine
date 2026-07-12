@@ -1,5 +1,4 @@
-print("-Checking cfg")
-cfg = {
+blueprints = {
     Debug_Mod = {
         path = "Debug Mod",
         init_args = {}
@@ -14,4 +13,4 @@ cfg = {
     }
 }
 
-return cfg 
+return blueprints

@@ -27,15 +27,32 @@ int main() {
     );
     // convert this table and fill the "ansi" hash map in console_wrapper.h with it
     term::ansi = lua::table_to_hash(ansi_table);
-    term::msg("ANSI-code map include: ", std::to_string(term::ansi.size()), "\n");
-    // test text using this hash map
+
+    // get the term control LUA_TABLE from cfg file
+    auto control_table = lua::do_file<sol::table>(
+        util::path({ paths["cfg_path"], "cfg_control_codes.lua" }),
+        lua::get_state(lua::states::server)
+    );
+    // convert this table and fill the "control_map" hash map in console_wrapper.h with it
+    term::control_map = lua::table_to_hash(control_table);
+
+
+    // === RUN ENGINE LOGIC ===
     term::msg("Hello", "World\n",
     "Engine CFG and TESTs: \n\n",
     term::get_ansi("error"),"hello in red", term::get_ansi("reset"), "\n");
 
+    term::msg("ANSI-code map include: ", std::to_string(term::ansi.size()), "\n");
+    term::msg("Control-code map include: ", std::to_string(term::control_map.size()), "\n");
 
-    // === RUN LOGIC ===
+    term::ask("Press Enter to continue");
     lua::do_file("on_engine_init.lua", lua::get_state(lua::states::server));
+
+
+    // === RUN BLUEPRINT LOGIC ===
+
+
+    // === TEST LOGIC ===
 
     term::ask("\nEnter to quit");
     return 0;
