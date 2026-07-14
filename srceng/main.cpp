@@ -1,7 +1,7 @@
-#include "glua/lua_env.hpp"
-#include "glua/init_lua_modules.h"
+#include "lua/lua_env.hpp"
+#include "lua/init_lua_modules.h"
 #include "utils/file_sys.h"
-#include "glua/utils/converters.h"
+#include "lua/utils/converters.h"
 
 int main() {
     term::clear();

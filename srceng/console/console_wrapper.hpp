@@ -35,7 +35,7 @@ namespace term{
         (std::cout << ... << args);
     }
 
-    inline std::string get_ansi(std::string_view name ){
+    [[nodiscard]] inline std::string get_ansi(std::string_view name) noexcept {
         auto i = ansi.find(std::string(name));
         if (i != ansi.end())
             return i->second;

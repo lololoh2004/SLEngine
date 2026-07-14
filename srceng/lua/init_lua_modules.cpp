@@ -8,7 +8,7 @@
 namespace lua::base{
     void init_base_api(sol::state& state){
         // Table tree API structure
-        sol::table api_table     = state["api"].get_or_create<sol::table>();
+        //sol::table api_table     = state["api"].get_or_create<sol::table>();
         sol::table math_table    = state["math"].get_or_create<sol::table>();
         sol::table util_table    = state["util"].get_or_create<sol::table>();
         sol::table console_table = state["console"].get_or_create<sol::table>();

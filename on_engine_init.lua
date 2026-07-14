@@ -1,9 +1,11 @@
 --util.system_launch("notepad.exe", "")
-console.pro_print('bold', 'success', 'hello in green', 123, true)
+--console.pro_print('bold', 'success', 'hello in green', 123, true)
+--
+--options = {
+--    first_ = "i think its first" ,
+--    second_ = 1,
+--    i_think_third = "1",
+--}
+--console.pick("hello its pick", options)
 
-options = {
-    first_ = "i think its first" ,
-    second_ = 1,
-    i_think_third = "1",
-}
-console.pick("hello its pick", options)
+-- You can leave small on-init things here

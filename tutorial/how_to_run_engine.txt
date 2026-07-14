@@ -1,0 +1,12 @@
+FOR WINDOWS
+1. Windows Terminal must be installed on your system 
+(verify this: typing "wt" at the command prompt (cmd) should open a new window for the enhanced console)
+(This isn't necessary, but if you launch it in a standard cmd window, ASCII styling won't display correctly, and raw characters will appear that are distracting to the eye)
+2. Make sure that your system is 64-bit
+(Even though many aspects support 32-bit, I’m not making any fucking promises regarding support for that architecture)
+
+B1. If you need to launch the bare engine, you should run "sl_engine [WindowsTerminal].bat" instead of "sl_engine.exe", because it automatically includes all the fixes.
+
+FOR LINUX
+1. no.
+2. uduntu.

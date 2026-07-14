@@ -1,6 +1,6 @@
 #pragma once
 #include <concepts>
-
+// Уебище удали нахуй .hpp и шаблоны. Разбей все на .cpp + .h
 namespace math{
     template <typename T>
     concept int_or_float = std::is_integral_v<T> || std::is_floating_point_v<T>;
