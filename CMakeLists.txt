@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(BGFX_LIBRARY_TYPE "STATIC_LIBRARY" CACHE STRING "" FORCE)
 add_subdirectory(thirdparty/glfw EXCLUDE_FROM_ALL)
 
 # --- DEPENDENCIES: HTTPLIB ---
@@ -25,23 +24,34 @@ endif()
 
 # --- SOURCES ---
 file(GLOB_RECURSE ENGINE_SOURCES
-        "srceng/*.cpp"
-        "srceng/*.h"
-        "srceng/*.hpp"
+        "src/*.cpp"
+        "src/*.h"
+        "src/*.hpp"
 )
 
 add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
-        srceng/lua/lua_env.hpp
-        srceng/console/console_wrapper.hpp
-        srceng/lua/api/math.hpp
-        srceng/utils/file_sys.cpp
-        srceng/utils/file_sys.h
-        srceng/lua/init_lua_modules.cpp
-        srceng/lua/api/console.cpp
-        srceng/lua/api/console.h
-        srceng/lua/init_lua_modules.h
-        srceng/lua/utils/converters.cpp
-        srceng/lua/utils/converters.h
+        src/lua/lua_env.hpp
+        src/console/console_wrapper.hpp
+        src/lua/api/math.hpp
+        src/utils/file_sys.cpp
+        src/utils/file_sys.h
+        src/lua/init_lua_modules.cpp
+        src/lua/api/console.cpp
+        src/lua/api/console.h
+        src/lua/init_lua_modules.h
+        src/lua/utils/converters.cpp
+        src/lua/utils/converters.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glad/glad.c
+        src/render/main_render.cpp
+        src/render/main_render.h
+        # ImGUI
+        thirdparty/imgui/imgui.cpp
+        thirdparty/imgui/imgui_draw.cpp
+        thirdparty/imgui/imgui_tables.cpp
+        thirdparty/imgui/imgui_widgets.cpp
+        thirdparty/imgui/imgui_demo.cpp
+        thirdparty/imgui/backends/imgui_impl_glfw.cpp
+        thirdparty/imgui/backends/imgui_impl_opengl3.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -50,12 +60,15 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 # --- INCLUDES ---
 target_include_directories(${PROJECT_NAME} PRIVATE
-        "srceng"
+        "src"
         "thirdparty/sol2/include"
         "thirdparty/luajit/src"
         # GLFW
         "thirdparty/glfw/include"
-        "/thirdparty/sdl3/include"
+        "thirdparty/glad"
+        # ImGUI
+        "thirdparty/imgui"
+        "thirdparty/imgui/backends"
 )
 
 # --- DEFINITIONS & LIBRARIES ---
@@ -80,22 +93,14 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         httplib
         ${LUAJIT_LIB_NAME}
+        opengl32
 )
 target_link_directories(${PROJECT_NAME} PRIVATE
-        "thirdparty/luajit/src"
-        "/thirdparty/sdl3/lib")
+        "thirdparty/luajit/src")
 
 # --- AUTO-COPY ALL WINDOWS DLLs TO SOURCE ROOT ---
 if(WIN32)
     set(DLL_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-
-    # SDL3
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory "${DLL_OUTPUT_DIR}"
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sdl3/bin/SDL3.dll"
-            "${DLL_OUTPUT_DIR}/SDL3.dll"
-    )
 
     # LuaJIT
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
