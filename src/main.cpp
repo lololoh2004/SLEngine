@@ -3,7 +3,9 @@
 #include "utils/file_sys.h"
 #include "lua/utils/converters.h"
 #include "console/console_wrapper.hpp"
-#include "render/main_render.h"
+
+#include "render/window_init.h"
+#include "render/render_frame.h"
 
 int main() {
     term::clear();
@@ -55,7 +57,7 @@ int main() {
 
 
     // === TEST LOGIC ===
-    render::init(600, 400, "Debug");
+    render::window_init("Debug", 600, 400);
     while (render::is_open()){
         render::update();
     }

@@ -42,8 +42,6 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         src/lua/utils/converters.cpp
         src/lua/utils/converters.h
         ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glad/glad.c
-        src/render/main_render.cpp
-        src/render/main_render.h
         # ImGUI
         thirdparty/imgui/imgui.cpp
         thirdparty/imgui/imgui_draw.cpp
@@ -56,6 +54,10 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         src/utils/text.h
         src/render/window_init.cpp
         src/render/window_init.h
+        src/render/ui_init.cpp
+        src/render/ui_init.h
+        src/render/render_frame.cpp
+        src/render/render_frame.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
