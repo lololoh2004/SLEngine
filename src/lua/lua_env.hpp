@@ -5,28 +5,24 @@
 #include "console/console_wrapper.hpp"
 
 namespace lua{
-    inline sol::state server_state;
-    inline sol::state client_state; // --PLASEHOLDER--
+    inline sol::state main_state;
     enum class states{
-        server,client
+        main
     };
 
     inline void init_state(){
-        server_state.open_libraries(sol::lib::base,
+        main_state.open_libraries(sol::lib::base,
             sol::lib::package,sol::lib::string,
             sol::lib::table,sol::lib::math,
             sol::lib::ffi);
-        server_state["ENGINE_PATH"] = std::filesystem::current_path().string();
-
-        client_state.open_libraries(sol::lib::base);
+        main_state["ENGINE_PATH"] = std::filesystem::current_path().string();
     }
 
     [[nodiscard]] inline sol::state& get_state(states type) noexcept {
         switch (type){
-        case states::server: return server_state;
-        case states::client: return client_state;
+        case states::main: return main_state;
         }
-        return client_state;
+        return main_state;
     }
 
     template <typename T>

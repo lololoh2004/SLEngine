@@ -10,30 +10,30 @@ int main() {
 
     // === LUA INIT AND VARS ===
     lua::init_state();
-    sol::state& server_state = lua::get_state(lua::states::server);
-    lua::do_file("on_lua_init.lua", lua::get_state(lua::states::server));
+    sol::state& main_state = lua::get_state(lua::states::main);
+    lua::do_file("on_lua_init.lua", lua::get_state(lua::states::main));
 
     // lua api bindings
-    lua::base::init_base_api(server_state);
+    lua::base::init_base_api(main_state);
 
     // load file paths cfg
-    auto engine_paths_table = lua::do_file<sol::table>("cfg_paths.lua", server_state);
+    auto engine_paths_table = lua::do_file<sol::table>("cfg_paths.lua", main_state);
     std::unordered_map paths = lua::table_to_hash(engine_paths_table);
 
 
     // === CFG and POST-INIT LOGIC ===
     // get the style LUA_TABLE from cfg file
     auto ansi_table = lua::do_file<sol::table>(
-        util::path({ paths["cfg_path"], "cfg_ansi_codes.lua" }),
-        lua::get_state(lua::states::server)
+        utils::path({ paths["cfg_path"], "cfg_ansi_codes.lua" }),
+        lua::get_state(lua::states::main)
     );
     // convert this table and fill the "ansi" hash map in console_wrapper.h with it
     term::ansi = lua::table_to_hash(ansi_table);
 
     // get the term control LUA_TABLE from cfg file
     auto control_table = lua::do_file<sol::table>(
-        util::path({ paths["cfg_path"], "cfg_control_codes.lua" }),
-        lua::get_state(lua::states::server)
+        utils::path({ paths["cfg_path"], "cfg_control_codes.lua" }),
+        lua::get_state(lua::states::main)
     );
     // convert this table and fill the "control_map" hash map in console_wrapper.h with it
     term::control_map = lua::table_to_hash(control_table);
@@ -48,7 +48,7 @@ int main() {
     term::msg("Control-code map include: ", std::to_string(term::control_map.size()), "\n");
 
     term::ask("Press Enter to continue");
-    lua::do_file("on_engine_init.lua", lua::get_state(lua::states::server));
+    lua::do_file("on_engine_init.lua", lua::get_state(lua::states::main));
 
 
     // === RUN BLUEPRINT LOGIC ===
@@ -60,6 +60,7 @@ int main() {
         render::update();
     }
 
-    term::ask("\nEnter to quit");
+    term::msg("\nEnter to reboot engine\nEsc (or other ansi) to quit");
+    if (term::get_key() == "enter") main();
     return 0;
 }

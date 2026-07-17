@@ -17,10 +17,12 @@ id = {
     win_72 = "up",
     win_80 = "down",
     win_13 = "enter",
+    win_27 = "escape",
 
     -- else (linux or smth)
     lin_65 = "up",
     lin_66 = "down",
     lin_10 = "enter",
+    lin_27 = "escape",
 }
 return id

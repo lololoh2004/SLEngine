@@ -48,19 +48,23 @@ namespace render{
             return false;
         return !glfwWindowShouldClose(window);
     }
-    void update(){
-        // Clear old frame
-        glClearColor(0.12f, 0.12f, 0.12f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+    void draw_ui(){
         // Starting new frame (ImGUI)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        // Buttons and etc
-        ImGui::ShowDemoWindow();
+        // Buttons, texts and etc
+
         // render ne frame (ImGUI)
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+    void update(){
+        // Clear old frame
+        glClearColor(0.12f, 0.12f, 0.12f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        // Draw UI
+        draw_ui();
         // Show this frame
         glfwSwapBuffers(window);
         glfwPollEvents();

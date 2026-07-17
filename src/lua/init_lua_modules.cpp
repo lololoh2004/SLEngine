@@ -1,17 +1,20 @@
 #include "init_lua_modules.h"
 
-#include "lua_env.hpp"
+//#include "lua_env.hpp"
+#include <sol/sol.hpp>
 #include "api/console.h"
-#include "api/math.hpp"
+#include "../utils/math_extension.hpp"
 #include "utils/file_sys.h"
+#include "console/console_wrapper.hpp"
 
 namespace lua::base{
     void init_base_api(sol::state& state){
         // Table tree API structure
-        //sol::table api_table     = state["api"].get_or_create<sol::table>();
+        //sol::table api_table   = state["api"].get_or_create<sol::table>();
         sol::table math_table    = state["math"].get_or_create<sol::table>();
         sol::table util_table    = state["util"].get_or_create<sol::table>();
         sol::table console_table = state["console"].get_or_create<sol::table>();
+        sol::table sgui_table    = state["sgui"].get_or_create<sol::table>();
         // Functions
         // From c++ term::...
         console_table["clear"] = &term::clear;
@@ -20,7 +23,7 @@ namespace lua::base{
         console_table["ask"] = &term::ask;
         //console_table["ask"] = &term::;
         // from c++ util::...
-        util_table["system_launch"] = &util::launch;
+        util_table["system_launch"] = &utils::launch;
         // From c++ math::
         math_table["abs"] = &math::abs<double>;
         math_table["lerp"] = &math::lerp<double>;
@@ -30,5 +33,6 @@ namespace lua::base{
         // Lua console module
         console_table["pro_print"] = &lua::lua_term::pro_print;
         console_table["pick"] = &lua::lua_term::lua_pick;
+        // Lua sgui system module
     }
 }

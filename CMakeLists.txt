@@ -32,7 +32,7 @@ file(GLOB_RECURSE ENGINE_SOURCES
 add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         src/lua/lua_env.hpp
         src/console/console_wrapper.hpp
-        src/lua/api/math.hpp
+        src/utils/math_extension.hpp
         src/utils/file_sys.cpp
         src/utils/file_sys.h
         src/lua/init_lua_modules.cpp
@@ -52,6 +52,10 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         thirdparty/imgui/imgui_demo.cpp
         thirdparty/imgui/backends/imgui_impl_glfw.cpp
         thirdparty/imgui/backends/imgui_impl_opengl3.cpp
+        src/utils/text.cpp
+        src/utils/text.h
+        src/render/window_init.cpp
+        src/render/window_init.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -69,6 +73,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         # ImGUI
         "thirdparty/imgui"
         "thirdparty/imgui/backends"
+        #
+        "thirdparty/cgltf"
+        "thirdparty/tinydir"
 )
 
 # --- DEFINITIONS & LIBRARIES ---

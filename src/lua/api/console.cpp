@@ -1,5 +1,6 @@
 #include "console.h"
-#include "../lua_env.hpp"
+#include <sol/sol.hpp>
+#include "console/console_wrapper.hpp"
 
 namespace lua::lua_term{
     void pro_print(std::string_view style1, std::string_view style2, sol::variadic_args va){

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string_view>
-#include <sol/sol.hpp>
+#include <sol/forward.hpp>
 
 namespace lua::lua_term{
     void pro_print(std::string_view style1, std::string_view style2, sol::variadic_args va);
