@@ -49,7 +49,7 @@ int main() {
     term::msg("ANSI-code map include: ", std::to_string(term::ansi.size()), "\n");
     term::msg("Control-code map include: ", std::to_string(term::control_map.size()), "\n");
 
-    term::ask("Press Enter to continue");
+    term::ask("\nPress Enter to continue\n   (This will launch on_engine_init.lua from root)");
     lua::do_file("on_engine_init.lua", lua::get_state(lua::states::main));
 
 
@@ -57,12 +57,15 @@ int main() {
 
 
     // === TEST LOGIC ===
-    render::window_init("Debug", 600, 400);
+    render::window_init("EngineDebug.msv", 600, 400);
     while (render::is_open()){
         render::update();
     }
 
     term::msg("\nEnter to reboot engine\nEsc (or other ansi) to quit");
-    if (term::get_key() == "enter") main();
+    if (term::get_key() == "enter"){
+        utils::launch("sl_engine [WindowsTerminal].bat", "");
+        return 0;
+    }
     return 0;
 }

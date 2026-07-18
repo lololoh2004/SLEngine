@@ -58,7 +58,12 @@ add_executable(${PROJECT_NAME} ${ENGINE_SOURCES}
         src/render/ui_init.h
         src/render/render_frame.cpp
         src/render/render_frame.h
+        src/render/ui_el_logic.cpp
+        src/render/ui_el_logic.h
 )
+
+# --- MY DEFINITIONS ---
+target_compile_definitions(sl_engine PRIVATE LUA_PARASITE)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
