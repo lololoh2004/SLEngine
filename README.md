@@ -1,0 +1,1 @@
+This project is abandoned and serves little purpose. I appreciate the experience I gained, but there is no point in expanding it. You shouldn't use it. it's just a rough prototype built with ImGui and GLFW.
